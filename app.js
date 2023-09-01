@@ -11,22 +11,18 @@ function initializeScratchCard(selectedImageIndex) {
     });
 }
 
-// Check if the scratch card has been revealed before and retrieve the selected image index
-let isRevealed = localStorage.getItem("isRevealed") === "true";
-let selectedImageIndex = localStorage.getItem("selectedImageIndex");
+// Function to retrieve query parameters from the URL
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
 
-// Initialize or restore the scratch card based on whether it has been revealed before
-$(document).ready(function () {
-    if (!isRevealed) {
-        // If the card has not been revealed, generate a random image index
-        const numImages = 4; // Number of available images
-        selectedImageIndex = Math.floor(Math.random() * numImages) + 1;
-        initializeScratchCard(selectedImageIndex);
-        localStorage.setItem("selectedImageIndex", selectedImageIndex);
-    } else {
-        // If the card has been revealed, load the last scratched card
-        if (selectedImageIndex) {
-            initializeScratchCard(selectedImageIndex);
-        }
-    }
-});
+// Get the selected image index from the query parameter or generate a random one
+let selectedImageIndex = getQueryParam("imageIndex");
+if (!selectedImageIndex) {
+    const numImages = 4; // Number of available images
+    selectedImageIndex = Math.floor(Math.random() * numImages) + 1;
+}
+
+// Initialize the scratch card with the selected image index
+initializeScratchCard(selectedImageIndex);
